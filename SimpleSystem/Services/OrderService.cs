@@ -53,7 +53,8 @@ public class OrderService
             OrderStatus = (int)OrderStatus.Pending,
             OrderDate = DateTime.Now,
         };
-        _orderRepository.Save(order);
+        
+        PlaceOrder(order);
 
         // 發送確認郵件
         SendConfirmationEmail(email, order);
