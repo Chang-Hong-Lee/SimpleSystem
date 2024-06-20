@@ -2,5 +2,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8a9f90e6_002D693d_002D4950_002D9d26_002D2313e0011d12/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Add_TwoNumbers_ShouldReturnSum" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::950E946C-5C1C-40AC-A5E3-90EECE5B03D2::net8.0::SimpleSystemTest.CalculatorTests.Add_TwoNumbers_ShouldReturnSum&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::950E946C-5C1C-40AC-A5E3-90EECE5B03D2::net8.0::SimpleSystemTest.CalculatorTests.Add_MaxIntAndZero_ShouldReturnMaxInt&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::950E946C-5C1C-40AC-A5E3-90EECE5B03D2::net8.0::SimpleSystemTest.CalculatorTests.Add_MaxIntAndOne_ShouldThrowOverflowException&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
