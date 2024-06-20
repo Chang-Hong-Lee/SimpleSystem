@@ -6,10 +6,12 @@ namespace SimpleSystem.Services;
 public class OrderService
 {
     private readonly IOrderRepository _orderRepository;
+    private readonly IEmailService _emailService;
 
-    public OrderService(IOrderRepository orderRepository)
+    public OrderService(IOrderRepository orderRepository, IEmailService emailService)
     {
         _orderRepository = orderRepository;
+        _emailService = emailService;
     }
 
     /// <summary> 下訂單 </summary>
@@ -57,7 +59,7 @@ public class OrderService
         PlaceOrder(order);
 
         // 發送確認郵件
-        SendConfirmationEmail(email, order);
+        _emailService.SendConfirmationEmail(email, order);
     }
 
     /// <summary> 驗證用戶資訊 </summary>
@@ -69,12 +71,6 @@ public class OrderService
         {
             throw new ArgumentException("Invalid user information");
         }
-    }
-
-    private void SendConfirmationEmail(string email, Order order)
-    {
-        // 發送郵件實作
-        
     }
     
     /// <summary> 計算總價 </summary>

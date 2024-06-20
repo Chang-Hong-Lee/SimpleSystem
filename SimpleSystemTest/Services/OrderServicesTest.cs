@@ -9,11 +9,13 @@ public class OrderServicesTest
 {
     private readonly OrderService _orderService;
     private readonly Mock<IOrderRepository> _mockOrderRepository;
+    private readonly Mock<IEmailService> _mockEmailService;
 
     public OrderServicesTest()
     {
         _mockOrderRepository = new Mock<IOrderRepository>();
-        _orderService = new OrderService(_mockOrderRepository.Object);
+        _mockEmailService = new Mock<IEmailService>();
+        _orderService = new OrderService(_mockOrderRepository.Object, _mockEmailService.Object);
     }
 
     [Fact]
@@ -26,7 +28,7 @@ public class OrderServicesTest
         mockRepo.Setup(repo => repo.Save(It.IsAny<Order>())).Returns(true);
 
         // 使用模擬的存儲庫對象創建OrderService對象
-        var service = new OrderService(mockRepo.Object);
+        var service = new OrderService(mockRepo.Object, _mockEmailService.Object);
         var order = new Order { /* 初始化訂單 */ };
 
         // Act
@@ -97,5 +99,27 @@ public class OrderServicesTest
 
         // Assert
         Assert.Equal(0, discount);
+    }
+    
+    [Fact]
+    public void ProcessUserOrder_ShouldWorkCorrectly()
+    {
+        // Arrange
+        var mockOrderRepository = new Mock<IOrderRepository>();
+        mockOrderRepository.Setup(repo => repo.Save(It.IsAny<Order>())).Returns(true);
+
+        var orderService = new OrderService(mockOrderRepository.Object, _mockEmailService.Object);
+        var userId = 1;
+        var email = "test@test.com";
+        var address = "Test Address";
+        var items = new List<OrderItem> { new OrderItem { Quantity = 1 } };
+        var discountCode = "10OFF";
+
+        // Act
+        orderService.ProcessUserOrder(userId, email, address, items, discountCode);
+
+        // Assert
+        mockOrderRepository.Verify(repo => repo.Save(It.IsAny<Order>()), Times.Once);
+        _mockEmailService.Verify(service => service.SendConfirmationEmail(email, It.IsAny<Order>()), Times.Once);
     }
 }
