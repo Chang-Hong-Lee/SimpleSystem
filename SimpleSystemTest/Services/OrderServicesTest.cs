@@ -7,6 +7,15 @@ namespace SimpleSystemTest.Services;
 
 public class OrderServicesTest
 {
+    private readonly OrderService _orderService;
+    private readonly Mock<IOrderRepository> _mockOrderRepository;
+
+    public OrderServicesTest()
+    {
+        _mockOrderRepository = new Mock<IOrderRepository>();
+        _orderService = new OrderService(_mockOrderRepository.Object);
+    }
+
     [Fact]
     public void PlaceOrder_OrderIsValid_ShouldReturnTrue()
     {
@@ -25,5 +34,11 @@ public class OrderServicesTest
         
         // Assert
         Assert.True(result);
+    }
+    
+    [Fact]
+    public void ValidateUserInfo_ShouldThrowException_WhenUserNotExist()
+    {
+        Assert.Throws<ArgumentException>(() => _orderService.ValidateUserInfo(0));
     }
 }

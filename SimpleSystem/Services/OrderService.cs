@@ -36,10 +36,7 @@ public class OrderService
     public void ProcessUserOrder(int userId, string email, string address, List<OrderItem> items, string discountCode)
     {
         // 驗證用戶信息
-        if (userId <= 0)
-        {
-            throw new ArgumentException("Invalid user information");
-        }
+        ValidateUserInfo(userId);
 
         // 計算總價
         decimal total = 0;
@@ -76,6 +73,17 @@ public class OrderService
 
         // 發送確認郵件
         SendConfirmationEmail(email, order);
+    }
+
+    /// <summary> 驗證用戶資訊 </summary>
+    /// <param name="userId"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public void ValidateUserInfo(int userId)
+    {
+        if (userId <= 0)
+        {
+            throw new ArgumentException("Invalid user information");
+        }
     }
 
     private void SendConfirmationEmail(string email, Order order)
