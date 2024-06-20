@@ -37,8 +37,65 @@ public class OrderServicesTest
     }
     
     [Fact]
-    public void ValidateUserInfo_ShouldThrowException_WhenUserNotExist()
+    public void ValidateUserInfo_UserNotExist_ShouldThrowException()
     {
+        // Act & Assert
         Assert.Throws<ArgumentException>(() => _orderService.ValidateUserInfo(0));
+    }
+    
+    [Fact]
+    public void ApplyDiscount_WithValidDiscountCode_ShouldReturnDiscountedTotal()
+    {
+        // Arrange
+        decimal total = 100;
+        string discountCode = "10OFF";
+
+        // Act
+        decimal discountedTotal = _orderService.ApplyDiscount(total, discountCode);
+
+        // Assert
+        Assert.Equal(90, discountedTotal);
+    }
+    
+    [Fact]
+    public void ApplyDiscount_WithInvalidDiscountCode_ShouldReturnOriginalTotal()
+    {
+        // Arrange
+        decimal total = 100;
+        string discountCode = "INVALID";
+
+        // Act
+        decimal discountedTotal = _orderService.ApplyDiscount(total, discountCode);
+
+        // Assert
+        Assert.Equal(total, discountedTotal);
+    }
+
+    [Fact]
+    public void GetDiscount_WithValidDiscountCode_ShouldReturnDiscountAmount()
+    {
+        // Arrange
+        decimal total = 100;
+        string discountCode = "10OFF";
+
+        // Act
+        decimal discount = _orderService.GetDiscount(discountCode, total);
+
+        // Assert
+        Assert.Equal(10, discount);
+    }
+    
+    [Fact]
+    public void GetDiscount_WithInvalidDiscountCode_ShouldReturnZero()
+    {
+        // Arrange
+        decimal total = 100;
+        string discountCode = "INVALID";
+
+        // Act
+        decimal discount = _orderService.GetDiscount(discountCode, total);
+
+        // Assert
+        Assert.Equal(0, discount);
     }
 }

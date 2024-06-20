@@ -39,26 +39,10 @@ public class OrderService
         ValidateUserInfo(userId);
 
         // 計算總價
-        decimal total = 0;
-        foreach (var item in items)
-        {
-            total += item.Price * item.Quantity;
-        }
-
+        decimal total = CalculateTotal(items);
+        
         // 應用折扣
-        if (!string.IsNullOrEmpty(discountCode))
-        {
-            decimal discount = 0;
-            if (discountCode == "10OFF")
-            {
-                discount = total * 0.1m;
-            }
-            else if (discountCode == "200Discount")
-            {
-                discount = 200;
-            }
-            total -= discount;
-        }
+        total = ApplyDiscount(total, discountCode);
 
         // 保存訂單
         var order = new Order
@@ -90,5 +74,51 @@ public class OrderService
     {
         // 發送郵件實作
         
+    }
+    
+    /// <summary> 計算總價 </summary>
+    /// <param name="items">商品</param>
+    private decimal CalculateTotal(List<OrderItem> items)
+    {
+        decimal total = 0;
+        // 假設這是從數據庫或其他來源獲取的產品價格
+        decimal productPricing = 100; 
+        
+        foreach (var item in items)
+        {
+            total += productPricing * item.Quantity;
+        }
+        return total;
+    }
+    
+    /// <summary> 折扣後的金額 </summary>
+    /// <param name="total">總金額</param>
+    /// <param name="discountCode">折扣碼</param>
+    /// <returns></returns>
+    public decimal ApplyDiscount(decimal total, string discountCode)
+    {
+        if (!string.IsNullOrEmpty(discountCode))
+        {
+            var discount = GetDiscount(discountCode, total);
+            total -= discount;
+        }
+        return total;
+    }
+
+    /// <summary> 取得折扣金額 </summary>
+    /// <param name="discountCode">折扣碼</param>
+    /// <param name="total">總金額</param>
+    public decimal GetDiscount(string discountCode, decimal total)
+    {
+        if (DiscountCodes.Contains(discountCode))
+        {
+            return discountCode switch
+            {
+                "10OFF" => total * 0.1m,
+                "20Discount" => 20,
+                _ => 0
+            };
+        }
+        return 0;
     }
 }
